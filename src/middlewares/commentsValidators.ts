@@ -3,7 +3,7 @@ import {ObjectId} from "mongodb";
 import {commentsQueryRepository} from "../queryRepositories/commentsQueryRepository";
 
 
-export const contentCommentValidator = body('name')
+export const contentCommentValidator = body('content')
     .isString().withMessage('Должно быть строковым значением')
     .trim()
     .isLength({min: 20, max: 300}).withMessage('Количество знаков 20-300')
