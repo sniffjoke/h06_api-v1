@@ -58,11 +58,15 @@ router.route('/:id')
 
 router.route('/:id/comments')
     .get(
+        idPostValidator,
+        errorMiddleware,
         getAllCommentsByPostId
     )
     .post(
-    createCommentByPostIdWithParams
-)
+        idPostValidator,
+        errorMiddleware,
+        createCommentByPostIdWithParams
+    )
 
 
 export default router
