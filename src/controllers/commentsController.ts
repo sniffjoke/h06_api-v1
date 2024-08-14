@@ -1,10 +1,8 @@
 import {Request, Response} from 'express';
 import {ObjectId} from "mongodb";
-import {blogsRepository} from "../repositories/blogsRepository";
 import {commentsRepository} from "../repositories/commentsRepository";
 import {commentsQueryHelper} from "../helpers/commentsHelper";
 import {commentsQueryRepository} from "../queryRepositories/commentsQueryRepository";
-import {IComment} from "../types/comments.interface";
 import {postsQueryRepository} from "../queryRepositories/postsQueryRepository";
 
 
@@ -72,15 +70,15 @@ export const createCommentByPostIdWithParams = async (req: Request, res: Respons
     }
 }
 
-export const createCommentController = async (req: Request, res: Response) => {
-    try {
-        const newComment = await commentsRepository.createComment(req.body)
-        const newCommentMap = commentsQueryRepository.commentMapOutput(newComment as IComment)
-        res.status(201).json(newCommentMap)
-    } catch (e) {
-        res.status(500).send(e)
-    }
-}
+// export const createCommentController = async (req: Request, res: Response) => {
+//     try {
+//         const newComment = await commentsRepository.createComment(req.body)
+//         const newCommentMap = commentsQueryRepository.commentMapOutput(newComment as IComment)
+//         res.status(201).json(newCommentMap)
+//     } catch (e) {
+//         res.status(500).send(e)
+//     }
+// }
 
 export const updateCommentController = async (req: Request, res: Response) => {
     try {

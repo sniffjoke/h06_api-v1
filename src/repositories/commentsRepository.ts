@@ -2,7 +2,6 @@ import {commentCollection} from "../db/mongo-db";
 import {ObjectId, UpdateResult} from "mongodb";
 import {commentsQueryRepository} from "../queryRepositories/commentsQueryRepository";
 import {CommentDBType} from "../dtos/comments.dto";
-import {IComment} from "../types/comments.interface";
 
 
 export const commentsRepository = {
