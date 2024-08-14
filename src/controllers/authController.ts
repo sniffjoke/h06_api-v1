@@ -1,5 +1,6 @@
 import {Request, Response} from 'express';
 import {usersQueryRepository} from "../queryRepositories/usersQueryRepository";
+import {authService} from "../services/auth.service";
 
 
 export const loginController = async (req: Request, res: Response) => {
@@ -11,6 +12,7 @@ export const loginController = async (req: Request, res: Response) => {
         } else {
             user = await usersQueryRepository.validateUserByEmail(loginOrEmail)
         }
+        console.log(user)
         if (!user) {
             res.status(401).json({
                 errorsMessages: [
@@ -24,7 +26,8 @@ export const loginController = async (req: Request, res: Response) => {
         }
         const isPasswordCorrect = password !== user.password // service
         if (!isPasswordCorrect) {
-            res.status(204).send('Вход выполнен')
+            const token = authService.createToken(user)
+            res.status(200).json({accessToken: token})
             return
         }
         res.status(401).json({

@@ -7,6 +7,7 @@ import {
 } from "../controllers/commentsController";
 import {errorMiddleware} from "../middlewares/errorMiddleware";
 import {contentCommentValidator, idCommentValidator} from "../middlewares/commentsValidators";
+import {authMiddlewareWithBearer} from "../middlewares/authMiddleware";
 
 
 const router = express.Router();
@@ -16,14 +17,14 @@ router.route('/')
 
 router.route('/:id')
     .put(
-    //     authMiddleware,
+        authMiddlewareWithBearer,
         idCommentValidator,
         contentCommentValidator,
         errorMiddleware,
         updateCommentController
     )
     .delete(
-    //     authMiddleware,
+        authMiddlewareWithBearer,
         idCommentValidator,
         errorMiddleware,
         deleteCommentController

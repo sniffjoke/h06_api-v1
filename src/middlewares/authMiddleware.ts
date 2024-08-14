@@ -1,4 +1,5 @@
 import {Request, Response, NextFunction} from "express";
+import * as jwt from "jsonwebtoken";
 import {SETTINGS} from "../settings";
 
 export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
@@ -13,6 +14,22 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
         }
     }
     if (!req.headers.authorization || !req.headers.authorization.startsWith('Basic')) {
+        res.status(401).send('Нет авторизации')
+        return
+    }
+    next()
+}
+
+export const authMiddlewareWithBearer = (req: Request, res: Response, next: NextFunction) => {
+    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+        const token = req.headers.authorization.split(' ')[1]
+        const decodedToken = jwt.verify(token, SETTINGS.VARIABLES.JWT_SECRET_ACCESS_TOKEN as string)
+        if (!decodedToken) {
+            res.status(401).send('Нет авторизации')
+            return
+        }
+    }
+    if (!req.headers.authorization || !req.headers.authorization.startsWith('Bearer')) {
         res.status(401).send('Нет авторизации')
         return
     }

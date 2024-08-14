@@ -20,5 +20,6 @@ export const SETTINGS = {
         USER_COLLECTION_NAME: 'users',
         COMMENT_COLLECTION_NAME: 'comments',
         ADMIN: process.env.ADMIN || 'admin:qwerty',
+        JWT_SECRET_ACCESS_TOKEN: process.env.JWT_SECRET_ACCESS,
     }
 }
