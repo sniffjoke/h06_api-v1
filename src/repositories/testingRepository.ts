@@ -1,4 +1,4 @@
-import {blogCollection, postCollection, userCollection} from "../db/mongo-db";
+import {blogCollection, commentCollection, postCollection, userCollection} from "../db/mongo-db";
 
 
 export const testingRepository = {
@@ -6,10 +6,12 @@ export const testingRepository = {
         const blogs = await blogCollection.deleteMany()
         const posts = await postCollection.deleteMany()
         const users = await userCollection.deleteMany()
+        const comments = await commentCollection.deleteMany()
         return {
             blogs,
             posts,
-            users
+            users,
+            comments
         }
     },
 }

@@ -1,7 +1,7 @@
 import {Request, Response} from 'express';
 import {ObjectId} from "mongodb";
 import {usersRepository} from "../repositories/usersRepository";
-import {usersQueryHelper} from "../helpers/usersHelpers";
+import {usersQueryHelper} from "../helpers/usersHelper";
 import {usersQueryRepository} from "../queryRepositories/usersQueryRepository";
 
 

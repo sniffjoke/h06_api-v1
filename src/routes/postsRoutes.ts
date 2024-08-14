@@ -15,6 +15,7 @@ import {
 } from "../middlewares/postsValidators";
 import {errorMiddleware} from "../middlewares/errorMiddleware";
 import {authMiddleware} from "../middlewares/authMiddleware";
+import {createCommentByPostIdWithParams, getAllCommentsByPostId} from "../controllers/commentsController";
 
 
 const router = express.Router();
@@ -30,6 +31,7 @@ router.route('/')
         errorMiddleware,
         createPostController
     );
+
 router.route('/:id')
     .put(
         authMiddleware,
@@ -51,6 +53,16 @@ router.route('/:id')
         idPostValidator,
         errorMiddleware,
         getControllerById
-    );
+    )
+
+
+router.route('/:id/comments')
+    .get(
+        getAllCommentsByPostId
+    )
+    .post(
+    createCommentByPostIdWithParams
+)
+
 
 export default router

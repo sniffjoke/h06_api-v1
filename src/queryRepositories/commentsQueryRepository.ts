@@ -24,9 +24,19 @@ export const commentsQueryRepository = {
     },
 
     async commentsSortWithQuery (query: any) {
-        const queryName = query.searchNameTerm !== null ? query.searchNameTerm : ''
+        const comments = await commentCollection
+            .find()
+            .sort(query.sortBy, query.sortDirection)
+            .limit(query.pageSize)
+            .skip((query.page - 1) * query.pageSize)
+            .toArray()
+        return comments
+    },
+
+    async commentsSortById (query: any) {
+        const postId = new ObjectId(query.postId)
         const filter = {
-            name: {$regex: queryName, $options: "i"},
+            postId
         }
         const comments = await commentCollection
             .find(filter)

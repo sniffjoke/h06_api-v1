@@ -1,3 +1,4 @@
+import {ObjectId} from "mongodb";
 
 
 export interface CommentDBType {
@@ -5,5 +6,6 @@ export interface CommentDBType {
     commentatorInfo: {
         userId: string
         userLogin: string
-    }
+    },
+    postId: ObjectId
 }

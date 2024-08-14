@@ -1,14 +1,15 @@
 import {Request, Response} from 'express';
 import {ObjectId} from "mongodb";
 import {blogsRepository} from "../repositories/blogsRepository";
-import {queryHelper} from "../helpers/helpers";
-import {blogsQueryRepository} from "../queryRepositories/blogsQueryRepository";
-import {Blog} from "../types/blogs.interface";
 import {commentsRepository} from "../repositories/commentsRepository";
+import {commentsQueryHelper} from "../helpers/commentsHelper";
+import {commentsQueryRepository} from "../queryRepositories/commentsQueryRepository";
+import {IComment} from "../types/comments.interface";
+import {postsQueryRepository} from "../queryRepositories/postsQueryRepository";
 
 
 export const getCommentsController = async (req: Request<any, any, any, any>, res: Response) => {
-    const query = await queryHelper(req.query, 'comments')
+    const query = await commentsQueryHelper(req.query)
     const comments = await commentsRepository.getAllComments(query)
     const {
         pageSize,
@@ -26,36 +27,75 @@ export const getCommentsController = async (req: Request<any, any, any, any>, re
     })
 }
 
-export const getBlogByIdController = async (req: Request, res: Response) => {
-    const id = new ObjectId(req.params.id)
-    const blog = await blogsQueryRepository.blogOutput(id)
-    res.status(200).json(blog)
+export const getAllCommentsByPostId = async (req: Request<any, any, any, any>, res: Response) => {
+    const postId = req.params.id;
+    const query = await commentsQueryHelper(req.query, postId)
+    const comments = await commentsRepository.getAllCommentsByPostId(query)
+    const {
+        pageSize,
+        pagesCount,
+        totalCount,
+        page,
+        items
+    } = comments
+    res.status(200).json({
+        pageSize,
+        pagesCount,
+        totalCount,
+        page,
+        items
+    })
+
 }
 
-export const createBlogController = async (req: Request, res: Response) => {
+export const getCommentByIdController = async (req: Request, res: Response) => {
+    const id = new ObjectId(req.params.id)
+    const comment = await commentsQueryRepository.commentOutput(id)
+    res.status(200).json(comment)
+}
+
+export const createCommentByPostIdWithParams = async (req: Request, res: Response) => {
     try {
-        const newBlog = await blogsRepository.createBlog(req.body)
-        const newBlogMap = blogsQueryRepository.blogMapOutput(newBlog as Blog)
-        res.status(201).json(newBlogMap)
+        const post = await postsQueryRepository.findPostById(new ObjectId(req.params.id))
+        const newComment = await commentsRepository.createComment({
+            content: req.body.content,
+            postId: post!._id,
+            commentatorInfo: {
+                userId: '12345',
+                userLogin: 'qwert'
+            }
+        })
+        const newCommentMap = commentsQueryRepository.commentMapOutput(newComment)
+        res.status(201).json(newCommentMap)
     } catch (e) {
         res.status(500).send(e)
     }
 }
 
-export const updateBlogController = async (req: Request, res: Response) => {
+export const createCommentController = async (req: Request, res: Response) => {
     try {
-        const blogId = new ObjectId(req.params.id)
-        await blogsRepository.updateBlogById(blogId, req.body)
+        const newComment = await commentsRepository.createComment(req.body)
+        const newCommentMap = commentsQueryRepository.commentMapOutput(newComment as IComment)
+        res.status(201).json(newCommentMap)
+    } catch (e) {
+        res.status(500).send(e)
+    }
+}
+
+export const updateCommentController = async (req: Request, res: Response) => {
+    try {
+        const commentId = new ObjectId(req.params.id)
+        await commentsRepository.updateCommentById(commentId, req.body)
         res.status(204).send('Обновлено')
     } catch (e) {
         res.status(500).send(e)
     }
 }
 
-export const deleteBlogController = async (req: Request, res: Response) => {
+export const deleteCommentController = async (req: Request, res: Response) => {
     try {
-        const blogId = new ObjectId(req.params.id)
-        await blogsRepository.deleteBlog(blogId)
+        const commentId = new ObjectId(req.params.id)
+        await commentsRepository.deleteComment(commentId)
         res.status(204).send('Удалено');
     } catch (e) {
         res.status(500).send(e)

@@ -15,7 +15,16 @@ export const commentsRepository = {
         }
     },
 
-    async createComment(newComment: CommentDBType): Promise<Omit<IComment, '_id'>> {
+    async getAllCommentsByPostId(query: any) {
+        // const comments = await commentsQueryRepository.commentsSortById(query)
+        const comments = await commentsQueryRepository.commentsSortById(query)
+        return {
+            ...query,
+            items: comments.map(comment => commentsQueryRepository.commentMapOutput(comment))
+        }
+    },
+
+    async createComment(newComment: CommentDBType): Promise<any> {
         const comment = {
             ...newComment,
             createdAt: new Date(Date.now()).toISOString()
