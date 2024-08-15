@@ -1,0 +1,41 @@
+import {NextFunction, Request, Response} from "express";
+import * as jwt from "jsonwebtoken";
+import {SETTINGS} from "../settings";
+import {ObjectId} from "mongodb";
+import {commentsQueryRepository} from "../queryRepositories/commentsQueryRepository";
+
+export const isOwnMiddleware = async (req: Request, res: Response, next: NextFunction) => {
+    let token = req.headers.authorization
+    if (!token) {
+        res.status(401).send('Нет авторизации')
+        return
+    }
+    try {
+        token = token.split(' ')[1]
+        if (token === null || !token) {
+            res.status(401).send('Нет авторизации')
+            return;
+        }
+        let decodedToken: any = jwt.verify(token, SETTINGS.VARIABLES.JWT_SECRET_ACCESS_TOKEN as string)
+        if (!decodedToken) {
+            res.status(401).send('Нет авторизации')
+            return;
+        }
+        // const user = await usersQueryRepository.getUserById(decodedToken._id)
+        // if (!user) {
+        //     res.status(401).send('Нет авторизации')
+        //     return
+        // }
+        const comment = await commentsQueryRepository.findCommentById(new ObjectId(req.params.id))
+        let isOwn: boolean = new ObjectId(decodedToken._id) === comment?.commentatorInfo.userId
+        console.log(comment?.commentatorInfo.userId)
+        if (isOwn) {
+            next()
+        } else {
+            res.status(403).send('Нет доступа')
+        }
+    } catch (e) {
+        res.status(401).send('Нет авторизации')
+        return;
+    }
+}

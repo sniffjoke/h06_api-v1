@@ -22,6 +22,6 @@ export const authService = {
 
     getToken(bearerToken: string | undefined) {
         return bearerToken ? bearerToken.split(' ')[1] : undefined
-    }
+    },
 
 }
