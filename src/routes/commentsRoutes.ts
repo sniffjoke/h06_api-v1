@@ -22,16 +22,16 @@ router.route('/')
 router.route('/:id')
     .put(
         authMiddlewareWithBearer,
-        isOwnMiddleware,
         idCommentValidator,
         contentCommentValidator,
+        isOwnMiddleware,
         errorMiddleware,
         updateCommentController
     )
     .delete(
         authMiddlewareWithBearer,
-        isOwnMiddleware,
         idCommentValidator,
+        isOwnMiddleware,
         errorMiddleware,
         deleteCommentController
     )
