@@ -14,7 +14,7 @@ import {
     idPostValidator
 } from "../middlewares/postsValidators";
 import {errorMiddleware} from "../middlewares/errorMiddleware";
-import {authMiddleware} from "../middlewares/authMiddleware";
+import {authMiddleware, authMiddlewareWithBearer} from "../middlewares/authMiddleware";
 import {createCommentByPostIdWithParams, getAllCommentsByPostId} from "../controllers/commentsController";
 import {contentCommentValidator} from "../middlewares/commentsValidators";
 
@@ -64,6 +64,7 @@ router.route('/:id/comments')
         getAllCommentsByPostId
     )
     .post(
+        authMiddlewareWithBearer,
         idPostValidator,
         contentCommentValidator,
         errorMiddleware,

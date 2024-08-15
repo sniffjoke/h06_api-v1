@@ -3,7 +3,6 @@ import {ObjectId} from "mongodb";
 
 export const commentsQueryHelper = async (query: { [key: string]: string | undefined }, postId?: string) => {
     const filter = postId ? {postId: new ObjectId(postId)} : undefined
-    console.log(filter)
     const totalCount = await db.collection('comments').countDocuments(filter)
     const pageSize = query.pageSize !== undefined ? +query.pageSize : 10
     const pagesCount = Math.ceil(totalCount / +pageSize)
