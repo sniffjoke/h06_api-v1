@@ -1,4 +1,4 @@
-import {validationResult} from "express-validator";
+    import {validationResult} from "express-validator";
 import {Request, Response, NextFunction} from "express";
 import {BlogDBType} from "../dtos/blogs.dto";
 import {PostDBType} from "../dtos/posts.dto";

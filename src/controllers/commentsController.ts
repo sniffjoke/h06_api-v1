@@ -63,6 +63,10 @@ export const createCommentByPostIdWithParams = async (req: Request, res: Respons
             return
         }
         const decodedToken: any = authService.decodeToken(token)
+        if (decodedToken === null) {
+            res.status(401).send('Нет авторизации')
+            return
+        }
         const user = await usersQueryRepository.getUserById(new ObjectId(decodedToken._id))
         const newComment = await commentsRepository.createComment({
             content: req.body.content,

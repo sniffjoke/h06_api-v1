@@ -13,7 +13,6 @@ export const loginController = async (req: Request, res: Response) => {
         } else {
             user = await usersQueryRepository.validateUserByEmail(loginOrEmail)
         }
-        console.log(user)
         if (!user) {
             res.status(401).json({
                 errorsMessages: [
