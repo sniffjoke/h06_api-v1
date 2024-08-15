@@ -21,14 +21,8 @@ export const isOwnMiddleware = async (req: Request, res: Response, next: NextFun
             res.status(401).send('Нет авторизации')
             return;
         }
-        // const user = await usersQueryRepository.getUserById(decodedToken._id)
-        // if (!user) {
-        //     res.status(401).send('Нет авторизации')
-        //     return
-        // }
         const comment = await commentsQueryRepository.findCommentById(new ObjectId(req.params.id))
-        let isOwn: boolean = new ObjectId(decodedToken._id) === comment?.commentatorInfo.userId
-        console.log(comment?.commentatorInfo.userId)
+        let isOwn: boolean = decodedToken._id === comment?.commentatorInfo.userId.toString()
         if (isOwn) {
             next()
         } else {
