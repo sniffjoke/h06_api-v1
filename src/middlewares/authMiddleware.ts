@@ -28,7 +28,7 @@ export const authMiddlewareWithBearer = (req: Request, res: Response, next: Next
     }
     try {
         token = token.split(' ')[1]
-        if (token !== null || !token) {
+        if (token === null || !token) {
             res.status(401).send('Нет авторизации')
             return;
         }

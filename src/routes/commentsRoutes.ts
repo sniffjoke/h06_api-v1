@@ -14,6 +14,9 @@ const router = express.Router();
 
 router.route('/')
     .get(getCommentsController)
+    // .post(
+    //
+    // )
 
 router.route('/:id')
     .put(
