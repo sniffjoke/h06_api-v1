@@ -13,6 +13,7 @@ export const isOwnMiddleware = async (req: Request, res: Response, next: NextFun
     try {
         token = token.split(' ')[1]
         if (token === null || !token) {
+            console.log('token is null')
             res.status(401).send('Нет авторизации')
             return;
         }
@@ -29,7 +30,7 @@ export const isOwnMiddleware = async (req: Request, res: Response, next: NextFun
             res.status(403).send('Нет доступа')
         }
     } catch (e) {
-        res.status(401).send('Нет авторизации')
+        res.status(401).send('Нет авторизации catch')
         return;
     }
 }

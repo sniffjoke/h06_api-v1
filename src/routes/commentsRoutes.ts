@@ -24,15 +24,15 @@ router.route('/:id')
         authMiddlewareWithBearer,
         idCommentValidator,
         contentCommentValidator,
-        isOwnMiddleware,
         errorMiddleware,
+        isOwnMiddleware,
         updateCommentController
     )
     .delete(
         authMiddlewareWithBearer,
         idCommentValidator,
-        isOwnMiddleware,
         errorMiddleware,
+        isOwnMiddleware,
         deleteCommentController
     )
     .get(

@@ -21,6 +21,7 @@ export const websiteUrlValidator = body('websiteUrl')
 
 export const idCommentValidator = param('id')
     .custom(async commentId => {
+        console.log(123)
         const comment = await commentsQueryRepository.findCommentById(new ObjectId(commentId))
         if (!comment) {
             throw new Error('Not found')
