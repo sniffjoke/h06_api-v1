@@ -13,6 +13,15 @@ export const authService = {
         )
 
         return token
+    },
+
+    decodeToken(token: string) {
+        const decodedToken = jwt.decode(token)
+        return decodedToken
+    },
+
+    getToken(bearerToken: string | undefined) {
+        return bearerToken ? bearerToken.split(' ')[1] : undefined
     }
 
 }

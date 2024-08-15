@@ -4,7 +4,7 @@ export interface IComment {
     _id: ObjectId;
     content: string;
     commentatorInfo: {
-      userId: string,
+      userId: ObjectId,
       userLogin: string
     };
     createdAt?: string;

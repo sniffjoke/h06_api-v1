@@ -10,7 +10,7 @@ export const SETTINGS = {
         COMMENTS: '/api/comments',
         TESTING: '/api/testing/all-data',
         USERS: '/api/users',
-        AUTH: '/api/auth/login',
+        AUTH: '/api/auth',
         MONGODB: process.env.MONGO_URI
     },
     VARIABLES: {

@@ -4,6 +4,8 @@ import {commentsRepository} from "../repositories/commentsRepository";
 import {commentsQueryHelper} from "../helpers/commentsHelper";
 import {commentsQueryRepository} from "../queryRepositories/commentsQueryRepository";
 import {postsQueryRepository} from "../queryRepositories/postsQueryRepository";
+import {usersQueryRepository} from "../queryRepositories/usersQueryRepository";
+import {authService} from "../services/auth.service";
 
 
 export const getCommentsController = async (req: Request<any, any, any, any>, res: Response) => {
@@ -55,12 +57,19 @@ export const getCommentByIdController = async (req: Request, res: Response) => {
 export const createCommentByPostIdWithParams = async (req: Request, res: Response) => {
     try {
         const post = await postsQueryRepository.findPostById(new ObjectId(req.params.id))
+        const token = authService.getToken(req.headers.authorization)
+        if (token === undefined) {
+            res.status(401).send('Нет авторизации')
+            return
+        }
+        const decodedToken: any = authService.decodeToken(token)
+        const user = await usersQueryRepository.getUserById(new ObjectId(decodedToken._id))
         const newComment = await commentsRepository.createComment({
             content: req.body.content,
             postId: post!._id,
             commentatorInfo: {
-                userId: '12345',
-                userLogin: 'qwert'
+                userId: user!._id,
+                userLogin: user!.login
             }
         })
         const newCommentMap = commentsQueryRepository.commentMapOutput(newComment)

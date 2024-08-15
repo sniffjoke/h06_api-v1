@@ -4,7 +4,7 @@ import {ObjectId} from "mongodb";
 export interface CommentDBType {
     content: string
     commentatorInfo: {
-        userId: string
+        userId: ObjectId
         userLogin: string
     },
     postId: ObjectId

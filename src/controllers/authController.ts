@@ -1,6 +1,7 @@
 import {Request, Response} from 'express';
 import {usersQueryRepository} from "../queryRepositories/usersQueryRepository";
 import {authService} from "../services/auth.service";
+import {ObjectId} from "mongodb";
 
 
 export const loginController = async (req: Request, res: Response) => {
@@ -40,6 +41,27 @@ export const loginController = async (req: Request, res: Response) => {
         })
         return
 
+
+    } catch (e) {
+        res.status(500).send(e)
+    }
+}
+
+export const getMeController = async (req: Request, res: Response) => {
+    try {
+        const token = authService.getToken(req.headers.authorization)
+        if (token === undefined) {
+            res.status(401).send('Нет авторизации')
+            return
+        }
+
+        const decodedToken: any = authService.decodeToken(token)
+        const user = await usersQueryRepository.getUserById(new ObjectId(decodedToken._id))
+        res.status(200).json({
+            id: decodedToken._id,
+            email: user?.email,
+            login: user?.login,
+        })
 
     } catch (e) {
         res.status(500).send(e)

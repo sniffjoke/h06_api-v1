@@ -39,7 +39,7 @@ export const authMiddlewareWithBearer = (req: Request, res: Response, next: Next
         }
         next()
     } catch (e) {
-        res.status(400).send('Невалидный токен')
+        res.status(403).send('Невалидный токен')
         return;
     }
 }
